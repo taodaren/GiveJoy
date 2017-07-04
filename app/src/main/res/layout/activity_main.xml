@@ -6,7 +6,7 @@
     tools:context="com.atmhls.givejoy.MainActivity">
 
     <me.majiajie.pagerbottomtabstrip.PageBottomTabLayout
-        android:id="@+id/tab"
+        android:id="@+id/main_tab"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
@@ -14,4 +14,10 @@
         android:elevation="8dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="0dp" />
+
+    <FrameLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/main_tab" />
 </RelativeLayout>
