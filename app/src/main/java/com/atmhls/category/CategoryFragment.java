@@ -1,23 +1,20 @@
 package com.atmhls.category;
 
-
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.atmhls.givejoy.R;
 import com.atmhls.global.BaseFragment;
 
 /**
- * A simple {@link Fragment} subclass.
+ * 附近店铺模块
  */
+
 public class CategoryFragment extends BaseFragment {
 
     @Override
     public View initView() {
-        return null;
+        View inflate = View.inflate(getContext(), R.layout.fragment_category, null);
+        return inflate;
     }
 
 }

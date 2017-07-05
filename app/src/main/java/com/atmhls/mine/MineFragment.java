@@ -1,6 +1,5 @@
 package com.atmhls.mine;
 
-
 import android.view.View;
 
 import com.atmhls.givejoy.R;

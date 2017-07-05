@@ -1,6 +1,5 @@
 package com.atmhls.enter;
 
-
 import android.view.View;
 
 import com.atmhls.givejoy.R;
