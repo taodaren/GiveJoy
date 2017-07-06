@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">欢乐送</string>
+    <string name="home_name">欢乐送商务平台</string>
+    <string name="category_name">附近店铺</string>
+    <string name="enter_name">邀请入驻</string>
+    <string name="mine_name">个人中心</string>
 </resources>

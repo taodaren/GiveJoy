@@ -1,9 +1,13 @@
 package com.atmhls.global;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +26,8 @@ public abstract class BaseFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
+
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -47,5 +53,17 @@ public abstract class BaseFragment extends Fragment {
     public void initData() {
     }
 
+    public Toolbar setToolbar(int toolbarId) {
+        Activity activity = getActivity();
+        AppCompatActivity appCompatActivity = (AppCompatActivity) activity;
+        Toolbar toolbar = (Toolbar) appCompatActivity.findViewById(toolbarId);
+        appCompatActivity.setSupportActionBar(toolbar);
+        ActionBar actionBar = appCompatActivity.getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
+        return toolbar;
+    }
 
 }
