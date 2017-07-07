@@ -1,7 +1,9 @@
 package com.atmhls.mine;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,7 +49,24 @@ public class MineFragment extends BaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_change) {
-            Toast.makeText(mContext, "切换到商家", Toast.LENGTH_SHORT).show();
+            //弹出对话框切换商家版
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+            dialog.setMessage("是否切换到商家版")
+                    .setCancelable(false)
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(mContext, "切换到商家", Toast.LENGTH_SHORT).show();
+
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .show();
         }
         return true;
     }
