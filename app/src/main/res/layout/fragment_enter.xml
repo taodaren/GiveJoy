@@ -1,16 +1,22 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.atmhls.enter.EnterFragment">
 
-    <include
-        android:id="@+id/toolbar_enter"
-        layout="@layout/layout_toolbar" />
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/toolbar_enter"
+            layout="@layout/layout_toolbar" />
+    </android.support.design.widget.AppBarLayout>
 
     <WebView
         android:id="@+id/web_enter"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-</FrameLayout>
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+</android.support.design.widget.CoordinatorLayout>
