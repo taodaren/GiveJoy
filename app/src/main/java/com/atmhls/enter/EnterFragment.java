@@ -1,5 +1,7 @@
 package com.atmhls.enter;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -25,6 +27,15 @@ public class EnterFragment extends BaseFragment {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
         webView.loadUrl("https://www.baidu.com/");
+    }
+
+    /**
+     * 在 onActivityCreated 方法中初始化 Toolbar
+     */
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setToolbar(R.id.toolbar_enter, R.string.enter_name, View.GONE);
     }
 
 }

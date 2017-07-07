@@ -4,9 +4,13 @@
     android:layout_height="match_parent"
     tools:context="com.atmhls.category.CategoryFragment">
 
+    <include
+        android:id="@+id/toolbar_category"
+        layout="@layout/layout_toolbar" />
+
     <WebView
         android:id="@+id/web_category"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
 </FrameLayout>

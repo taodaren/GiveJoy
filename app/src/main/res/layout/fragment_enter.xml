@@ -4,9 +4,13 @@
     android:layout_height="match_parent"
     tools:context="com.atmhls.enter.EnterFragment">
 
+    <include
+        android:id="@+id/toolbar_enter"
+        layout="@layout/layout_toolbar" />
+
     <WebView
         android:id="@+id/web_enter"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
 </FrameLayout>
