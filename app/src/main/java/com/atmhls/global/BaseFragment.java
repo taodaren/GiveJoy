@@ -1,6 +1,5 @@
 package com.atmhls.global;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +10,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.atmhls.givejoy.R;
 
 /**
  * Fragment 基类
@@ -27,6 +30,7 @@ public abstract class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
 
+        // 加上这句话，menu才会显示出来
         setHasOptionsMenu(true);
     }
 
@@ -53,14 +57,33 @@ public abstract class BaseFragment extends Fragment {
     public void initData() {
     }
 
-    public Toolbar setToolbar(int toolbarId) {
-        Activity activity = getActivity();
-        AppCompatActivity appCompatActivity = (AppCompatActivity) activity;
+    /**
+     * 设置 Toolbar
+     *
+     * @param toolbarId      menu_toolbar ID
+     * @param title          标题
+     * @param cityVisibility 城市选择控件是否显示
+     * @return menu_toolbar
+     */
+    public Toolbar setToolbar(int toolbarId, int title, int cityVisibility) {
+        AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
         Toolbar toolbar = (Toolbar) appCompatActivity.findViewById(toolbarId);
         appCompatActivity.setSupportActionBar(toolbar);
+
+        //设置标题
+        TextView textTitle = (TextView) getActivity().findViewById(R.id.title_toolbar);
+        textTitle.setVisibility(View.VISIBLE);
+        textTitle.setText(title);
+
+        //城市选择
+        RelativeLayout cityLayout = (RelativeLayout) getActivity().findViewById(R.id.layout_city);
+        cityLayout.setVisibility(cityVisibility);
+
         ActionBar actionBar = appCompatActivity.getSupportActionBar();
         if (actionBar != null) {
+            //隐藏左上角图标（true 为显示）
             actionBar.setDisplayHomeAsUpEnabled(false);
+            //隐藏 Toolbar 自带标题栏
             actionBar.setDisplayShowTitleEnabled(false);
         }
         return toolbar;
