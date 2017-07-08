@@ -1,6 +1,7 @@
 package com.atmhls.mine;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -88,7 +89,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_avatar:
-                Toast.makeText(mContext, "img_avatar", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), MaterialActivity.class);
+                startActivity(intent);
                 break;
             case R.id.qian_bao_mine:
                 Toast.makeText(mContext, "qian_bao_mine", Toast.LENGTH_SHORT).show();

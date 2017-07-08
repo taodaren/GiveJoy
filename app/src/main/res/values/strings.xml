@@ -4,4 +4,6 @@
     <string name="category_name">附近店铺</string>
     <string name="enter_name">邀请入驻</string>
     <string name="mine_name">个人中心</string>
+
+    <string name="material_prompt">*温馨提示：为了确保您能顺畅享受平台赠送，请务必写真实信息</string>
 </resources>
