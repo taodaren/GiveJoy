@@ -18,7 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.atmhls.mine.MaterialActivity"></activity>
+        <activity android:name="com.atmhls.mine.MaterialActivity" />
+        <activity android:name="com.atmhls.global.LoginActivity" />
+        <activity android:name="com.atmhls.global.RegisterActivity"></activity>
     </application>
 
 </manifest>

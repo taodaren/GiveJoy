@@ -1,11 +1,13 @@
 package com.atmhls.givejoy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.atmhls.category.CategoryFragment;
 import com.atmhls.enter.EnterFragment;
+import com.atmhls.global.LoginActivity;
 import com.atmhls.home.HomeFragment;
 import com.atmhls.mine.MineFragment;
 
@@ -63,7 +65,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRepeat(int index) {
                 //重复选中时触发
-
+                switch (index) {// 测试用
+                    case 0:
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        break;
+                }
             }
         });
     }
