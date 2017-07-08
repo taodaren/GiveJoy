@@ -32,7 +32,7 @@
                 android:background="@color/colorWhite"
                 android:padding="10dp">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/img_avatar"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
@@ -82,6 +82,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/qian_bao_mine"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="15dp"
@@ -109,6 +110,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/yao_qing_ma_mine"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="15dp"
@@ -136,6 +138,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/yao_qing_mine"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
@@ -163,6 +166,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/msg_mine"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="15dp"
@@ -196,6 +200,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/zhong_chou_mine"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
@@ -223,6 +228,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/quan_shu_mine"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
@@ -257,6 +263,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/quit_mine"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="15dp"
@@ -284,6 +291,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/set_mine"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginBottom="15dp"
