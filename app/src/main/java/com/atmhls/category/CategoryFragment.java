@@ -51,6 +51,7 @@ public class CategoryFragment extends BaseFragment {
         menu.findItem(R.id.menu_star).setVisible(false);
         menu.findItem(R.id.menu_change).setVisible(false);
         menu.findItem(R.id.menu_more).setVisible(false);
+        menu.findItem(R.id.menu_register).setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
