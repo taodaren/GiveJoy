@@ -34,15 +34,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="手机号"
+            android:text="账号"
             android:textSize="18sp" />
 
         <EditText
+            android:id="@+id/edit_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:background="@null"
-            android:hint="请输入手机号" />
+            android:hint="请输入账号"
+            android:textSize="15sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -57,47 +59,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="邀请码"
+            android:text="密码"
             android:textSize="18sp" />
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:background="@null"
-            android:hint="输入邀请码或扫描邀请二维码" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="1dp"
-        android:background="@color/colorWhite"
-        android:gravity="center_vertical"
-        android:padding="5dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="验证码"
-            android:textSize="18sp" />
-
-        <EditText
+            android:id="@+id/edit_password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:background="@null"
-            android:hint="请输入验证码" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@drawable/shape_lgoin_code"
-            android:text="获得验证码"
-            android:textColor="@color/colorPrimary" />
+            android:hint="请输入密码"
+            android:textSize="15sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -113,7 +86,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="同意协议"
+            android:text="记住账号"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
 
@@ -121,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="查看注册协议"
+            android:text="找回密码？"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
     </LinearLayout>
@@ -132,15 +105,17 @@
         android:layout_margin="5dp">
 
         <Button
+            android:id="@+id/btn_login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:background="@drawable/shape_btn_red"
-            android:text="注册"
+            android:text="登录"
             android:textColor="@color/colorWhite" />
 
         <Button
+            android:id="@+id/btn_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
