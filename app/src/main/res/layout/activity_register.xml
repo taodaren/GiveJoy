@@ -14,11 +14,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp">
+        android:padding="30dp">
 
         <ImageView
-            android:layout_width="130dp"
-            android:layout_height="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:src="@drawable/hls_logo" />
     </RelativeLayout>
@@ -38,6 +38,7 @@
             android:textSize="18sp" />
 
         <EditText
+            android:id="@+id/edit_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -62,11 +63,12 @@
             android:textSize="18sp" />
 
         <EditText
+            android:id="@+id/edit_invite_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:background="@null"
-            android:hint="输入邀请码或扫描邀请二维码"
+            android:hint="输入邀请码"
             android:textSize="15sp" />
     </LinearLayout>
 
@@ -86,6 +88,7 @@
             android:textSize="18sp" />
 
         <EditText
+            android:id="@+id/edit_phone_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -95,6 +98,7 @@
             android:textSize="15sp" />
 
         <Button
+            android:id="@+id/btn_get_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -109,6 +113,7 @@
         android:layout_margin="10dp">
 
         <CheckBox
+            android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -135,6 +140,7 @@
         android:layout_margin="5dp">
 
         <Button
+            android:id="@+id/btn_register"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -144,6 +150,7 @@
             android:textColor="@color/colorWhite" />
 
         <Button
+            android:id="@+id/btn_cancel_register"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
