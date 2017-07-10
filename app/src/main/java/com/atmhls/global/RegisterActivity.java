@@ -2,6 +2,8 @@ package com.atmhls.global;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +23,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +35,44 @@ import okhttp3.Response;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
+    private static final int DEFAULT_TIMEOUT = 5;
+    private static final int TYPE_SUCCESS = 0;
+    private static final int TYPE_ERROR = 1;
+    private static final int TYPE_VCODE_ERROR = 2;
+
+    private static final String KEY_JSON = "key_json";
+    private static final String KEY_ERROR = "key_json";
+
+    private static final int PARSE_PHONE_CODE = 0;
+
+    private ProgressDialog progressDialog;
+
+    private Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.arg1) {
+                case TYPE_SUCCESS:
+                    Bundle bundle1 = (Bundle) msg.obj;
+                    String json = bundle1.getString(KEY_JSON);
+                    parseJSONWithGSON(json, PARSE_PHONE_CODE);
+                    break;
+                case TYPE_ERROR:
+                    Bundle bundle2 = (Bundle) msg.obj;
+                    String errorMsg = bundle2.getString(KEY_ERROR);
+                    Log.e(TAG, "errorMsg:" + errorMsg);
+                    break;
+                case TYPE_VCODE_ERROR:
+                    Toast.makeText(RegisterActivity.this, "获取验证码失败", Toast.LENGTH_SHORT).show();
+                    Bundle bundle3 = (Bundle) msg.obj;
+                    String errorMsg2 = bundle3.getString(KEY_ERROR);
+                    Log.e(TAG, "errorMsg:" + errorMsg2);
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
+
     private EditText editPhone, editInviteCode, editPhoneCode;
     private Button btnRegister, btnCancel, btnGetCode;
 
@@ -77,20 +118,38 @@ public class RegisterActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        OkHttpClient client = new OkHttpClient();
+                        OkHttpClient client = new OkHttpClient()
+                                .newBuilder()
+                                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                                .retryOnConnectionFailure(true)
+                                .build();
                         try {
                             Request request = new Request.Builder()
-                                    .url(I.URL_PHONE_CODE)
+                                    .url(I.URL_PHONE_CODE + "?phone=" + editPhone.getText().toString())
                                     .build();
                             Log.e(TAG, "request: ==============" + request);
                             Response response = client.newCall(request).execute();
                             Log.e(TAG, "response: ==============" + response);
-
-                            String responseData = response.body().string();
-
-                            //使用 GSON 解析数据
-                            parseJSONWithGSON(responseData);
+                            //判断请求数据
+                            if (response.isSuccessful()) {
+                                Log.e(TAG, "请求数据成功: " + response.body().string());
+                                String responseData = response.body().string();
+                                Message message = Message.obtain();
+                                message.arg1 = TYPE_SUCCESS;
+                                Bundle bundle = new Bundle();
+                                bundle.putString(KEY_JSON, responseData);
+                                message.obj = bundle;
+                                handler.sendMessage(message);
+                            } else {
+                                throw new IOException(response.message());
+                            }
                         } catch (IOException e) {
+                            Message message = Message.obtain();
+                            message.arg1 = TYPE_VCODE_ERROR;
+                            Bundle bundle = new Bundle();
+                            bundle.putString(KEY_ERROR, e.getMessage());
+                            message.obj = bundle;
+                            handler.sendMessage(message);
                             e.printStackTrace();
                         }
                     }
@@ -99,11 +158,15 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void parseJSONWithGSON(String responseData) {
+    private void parseJSONWithGSON(String responseData,int type) {
         Gson gson = new Gson();
-        PhoneCodeBean phoneCodeBean = gson.fromJson(responseData, new TypeToken() {
-        }.getType());
-        Log.e(TAG, "parseJSONWithGSON: " + phoneCodeBean.getPhoneCode());
+        switch (type) {
+            case PARSE_PHONE_CODE:
+                PhoneCodeBean phoneCodeBean = gson.fromJson(responseData, new TypeToken() {
+                }.getType());
+                Log.e(TAG, "parseJSONWithGSON: " + phoneCodeBean.getPhoneCode());
+                break;
+        }
 //        List<PhoneCodeBean> beanList = gson.fromJson(responseData,
 //                new TypeToken<PhoneCodeBean>() {
 //
@@ -153,7 +216,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         btnRegister.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(RegisterActivity.this);
+        progressDialog = new ProgressDialog(RegisterActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("创建帐户...");
         progressDialog.show();
@@ -166,16 +229,16 @@ public class RegisterActivity extends AppCompatActivity {
         //发送网络请求
         sendRequestWithOkHttp(phone, phoneCode, inviteCode);
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        //完全调用 onRegisterSuccess 或 onRegisterFailed
-                        //这里取决于成功
-                        onRegisterSuccess();
-                        // onRegisterFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+//        new android.os.Handler().postDelayed(
+//                new Runnable() {
+//                    public void run() {
+//                        //完全调用 onRegisterSuccess 或 onRegisterFailed
+//                        //这里取决于成功
+//                        onRegisterSuccess();
+//                        // onRegisterFailed();
+//                        progressDialog.dismiss();
+//                    }
+//                }, 3000);
     }
 
     /**
@@ -209,6 +272,7 @@ public class RegisterActivity extends AppCompatActivity {
                         throw new IOException("解析异常：" + response);
                     }
                 } catch (IOException e) {
+
                     e.printStackTrace();
                 }
             }
