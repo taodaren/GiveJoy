@@ -3,6 +3,8 @@ package com.atmhls.global;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +24,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,10 +37,40 @@ import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
+    private static final int DEFAULT_TIMEOUT = 5;
     private static final int REQUEST_SIGNUP = 0;
+
+    private static final int TYPE_SUCCESS = 0;
+    private static final int TYPE_ERROR = 1;
+
+    private static final String KEY_JSON = "key_json";
+    private static final String KEY_ERROR = "key_json";
 
     private EditText editAccount, editPassword;
     private Button btnLogin, btnCancel;
+    private ProgressDialog progressDialog;
+    private Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.arg1) {
+                case TYPE_SUCCESS:
+                    progressDialog.dismiss();
+                    Bundle bundle1 = (Bundle) msg.obj;
+                    String json = bundle1.getString(KEY_JSON);
+                    parseJSONWithGSON(json);
+                    break;
+                case TYPE_ERROR:
+                    Bundle bundle2 = (Bundle) msg.obj;
+                    String errorMsg = bundle2.getString(KEY_ERROR);
+                    onLoginFailed();
+                    progressDialog.dismiss();
+                    Log.e(TAG, "errorMsg:" + errorMsg);
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
 
         btnLogin.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("登录中...");
         progressDialog.show();
@@ -141,15 +174,15 @@ public class LoginActivity extends AppCompatActivity {
         //发送网络请求
         sendRequestWithOkHttp(account, password);
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        //完成调用 onLoginSuccess 或 onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+//        new android.os.Handler().postDelayed(
+//                new Runnable() {
+//                    public void run() {
+//                        //完成调用 onLoginSuccess 或 onLoginFailed
+//                        onLoginSuccess();
+//                        // onLoginFailed();
+//                        progressDialog.dismiss();
+//                    }
+//                }, 3000);
     }
 
     /**
@@ -163,7 +196,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    OkHttpClient client = new OkHttpClient();
+                    OkHttpClient client = new OkHttpClient()
+                            .newBuilder()
+                            .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                            .retryOnConnectionFailure(true)
+                            .build();
+
                     RequestBody requestBody = new FormBody.Builder()
                             .add("phone", account)
                             .add("validCode", password)
@@ -172,20 +210,29 @@ public class LoginActivity extends AppCompatActivity {
                             .url(I.URL_LOGIN)
                             .post(requestBody)
                             .build();
+
                     Log.e(TAG, "request: " + request);
                     Response response = client.newCall(request).execute();
+
                     //判断请求数据
                     if (response.isSuccessful()) {
-                        Log.e(TAG, "请求数据成功: " + response);
+                        Log.e(TAG, "请求数据成功: " + response.body().string());
+                        Message message = Message.obtain();
+                        message.arg1 = TYPE_SUCCESS;
+                        Bundle bundle = new Bundle();
+                        bundle.putString(KEY_JSON, response.body().string());
+                        message.obj = bundle;
+                        handler.sendMessage(message);
                     } else {
-                        throw new IOException("解析异常：" + response);
+                        throw new IOException(response.message());
                     }
-
-//                    String responseData = response.body().string();
-
-                    //解析 JSON 数据
-//                    parseJSONWithGSON(responseData);//使用 GSON
                 } catch (Exception e) {
+                    Message message = Message.obtain();
+                    message.arg1 = TYPE_ERROR;
+                    Bundle bundle = new Bundle();
+                    bundle.putString(KEY_ERROR, e.getMessage());
+                    message.obj = bundle;
+                    handler.sendMessage(message);
                     e.printStackTrace();
                 }
             }
