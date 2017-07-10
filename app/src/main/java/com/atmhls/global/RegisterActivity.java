@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -13,11 +14,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atmhls.givejoy.R;
+import com.atmhls.global.bean.PhoneCodeBean;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class RegisterActivity extends AppCompatActivity {
+    private static final String TAG = "RegisterActivity";
     private EditText editPhone, editInviteCode, editPhoneCode;
     private Button btnRegister, btnCancel, btnGetCode;
 
@@ -60,8 +74,43 @@ public class RegisterActivity extends AppCompatActivity {
         btnGetCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        OkHttpClient client = new OkHttpClient();
+                        try {
+                            Request request = new Request.Builder()
+                                    .url(I.URL_PHONE_CODE)
+                                    .build();
+                            Log.e(TAG, "request: ==============" + request);
+                            Response response = client.newCall(request).execute();
+                            Log.e(TAG, "response: ==============" + response);
+
+                            String responseData = response.body().string();
+
+                            //使用 GSON 解析数据
+                            parseJSONWithGSON(responseData);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
             }
         });
+    }
+
+    private void parseJSONWithGSON(String responseData) {
+        Gson gson = new Gson();
+        PhoneCodeBean phoneCodeBean = gson.fromJson(responseData, new TypeToken() {
+        }.getType());
+        Log.e(TAG, "parseJSONWithGSON: " + phoneCodeBean.getPhoneCode());
+//        List<PhoneCodeBean> beanList = gson.fromJson(responseData,
+//                new TypeToken<PhoneCodeBean>() {
+//
+//                }.getType());
+//        for (PhoneCodeBean phoneCodeBean : beanList) {
+//            Log.e(TAG, "parseJSONWithGSON: phone code is " + phoneCodeBean.getPhoneCode());
+//        }
     }
 
     private void setToolbar() {
@@ -110,10 +159,12 @@ public class RegisterActivity extends AppCompatActivity {
         progressDialog.show();
 
         String phone = editPhone.getText().toString();
-        String inviteCode = editInviteCode.getText().toString();
         String phoneCode = editPhoneCode.getText().toString();
+        String inviteCode = editInviteCode.getText().toString();
 
         // TODO: 在这里实现你自己的注册逻辑
+        //发送网络请求
+        sendRequestWithOkHttp(phone, phoneCode, inviteCode);
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -125,6 +176,43 @@ public class RegisterActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     }
                 }, 3000);
+    }
+
+    /**
+     * 发送网络请求
+     *
+     * @param phone      手机号
+     * @param validCode  该手机号收到的验证码
+     * @param inviteCode 非必填 邀请码
+     */
+    private void sendRequestWithOkHttp(final String phone, final String validCode, final String inviteCode) {
+        new Thread() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                RequestBody body = new FormBody.Builder()
+                        .add("phone", phone)
+                        .add("validCode", validCode)
+                        .add("inviteCode", inviteCode)
+                        .build();
+                Request request = new Request.Builder()
+                        .url(I.URL_REGISTER)
+                        .post(body)
+                        .build();
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    //判断请求数据
+                    if (response.isSuccessful()) {
+                        Log.e(TAG, "请求数据成功: " + response);
+                    } else {
+                        throw new IOException("解析异常：" + response);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 
     public void onRegisterSuccess() {

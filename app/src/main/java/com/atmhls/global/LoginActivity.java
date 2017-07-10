@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         String account = editAccount.getText().toString();
         String password = editPassword.getText().toString();
 
-        //网络请求
+        //发送网络请求
         sendRequestWithOkHttp(account, password);
 
         new android.os.Handler().postDelayed(
@@ -152,6 +152,12 @@ public class LoginActivity extends AppCompatActivity {
                 }, 3000);
     }
 
+    /**
+     * 发送网络请求
+     *
+     * @param account  手机号
+     * @param password 该手机号收到的验证码
+     */
     private void sendRequestWithOkHttp(final String account, final String password) {
         new Thread(new Runnable() {
             @Override
@@ -159,14 +165,22 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     OkHttpClient client = new OkHttpClient();
                     RequestBody requestBody = new FormBody.Builder()
-                            .add("account",account)
-                            .add("password",password)
+                            .add("phone", account)
+                            .add("validCode", password)
                             .build();
                     Request request = new Request.Builder()
                             .url(I.URL_LOGIN)
                             .post(requestBody)
                             .build();
-//                    Response response = client.newCall(request).enqueue();
+                    Log.e(TAG, "request: " + request);
+                    Response response = client.newCall(request).execute();
+                    //判断请求数据
+                    if (response.isSuccessful()) {
+                        Log.e(TAG, "请求数据成功: " + response);
+                    } else {
+                        throw new IOException("解析异常：" + response);
+                    }
+
 //                    String responseData = response.body().string();
 
                     //解析 JSON 数据
@@ -174,8 +188,6 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
             }
         }).start();
     }
