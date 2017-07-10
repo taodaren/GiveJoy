@@ -11,7 +11,7 @@ public class I {
     //获取手机验证码
     public static final String URL_PHONE_CODE = URL + "/rest/phoneController/getPhoneCode";//477271
     //注册
-    private static final String URL_REGISTER = URL + "/rest/register";
+    public static final String URL_REGISTER = URL + "/rest/register";
     //登陆
-    private static final String URL_LOGIN = URL + "/rest/login";
+    public static final String URL_LOGIN = URL + "/rest/login";
 }

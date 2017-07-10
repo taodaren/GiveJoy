@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,11 +16,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atmhls.givejoy.R;
+import com.atmhls.global.bean.LoginBean;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
     private EditText editAccount, editPassword;
@@ -124,7 +138,8 @@ public class LoginActivity extends AppCompatActivity {
         String account = editAccount.getText().toString();
         String password = editPassword.getText().toString();
 
-        // TODO: 在这里实现你自己的认证逻辑
+        //网络请求
+        sendRequestWithOkHttp(account, password);
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -135,6 +150,45 @@ public class LoginActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     }
                 }, 3000);
+    }
+
+    private void sendRequestWithOkHttp(final String account, final String password) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("account",account)
+                            .add("password",password)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url(I.URL_LOGIN)
+                            .post(requestBody)
+                            .build();
+//                    Response response = client.newCall(request).enqueue();
+//                    String responseData = response.body().string();
+
+                    //解析 JSON 数据
+//                    parseJSONWithGSON(responseData);//使用 GSON
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }).start();
+    }
+
+    private void parseJSONWithGSON(String jsonData) {
+        Gson gson = new Gson();
+        List<LoginBean> beanList = gson.fromJson(jsonData,
+                new TypeToken<List<LoginBean>>() {
+                }.getType());
+        for (LoginBean loginBean : beanList) {
+            Log.e(TAG, "parseJSONWithGSON: phone is " + loginBean.getPhone());
+            Log.e(TAG, "parseJSONWithGSON: validCode is " + loginBean.getValidCode());
+        }
     }
 
     @Override

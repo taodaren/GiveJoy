@@ -60,7 +60,6 @@ public class RegisterActivity extends AppCompatActivity {
         btnGetCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
     }
