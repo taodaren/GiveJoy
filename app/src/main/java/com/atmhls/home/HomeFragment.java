@@ -1,5 +1,6 @@
 package com.atmhls.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -9,11 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.atmhls.givejoy.R;
 import com.atmhls.global.BaseFragment;
 import com.atmhls.global.I;
+import com.atmhls.global.LoginActivity;
 
 /**
  * 首页模块
@@ -76,7 +77,8 @@ public class HomeFragment extends BaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_qr_code) {
-            Toast.makeText(mContext, "跳转到二维码", Toast.LENGTH_SHORT).show();
+            //模拟测试登陆（借用）
+            startActivity(new Intent(getContext(), LoginActivity.class));
         }
         return true;
     }

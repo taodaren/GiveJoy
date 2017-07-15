@@ -120,8 +120,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login() {
-//        Log.d(TAG, "Login");
-
         //如果没有验证成功，登录失败
         if (!validate()) {
             onLoginFailed();
@@ -139,8 +137,9 @@ public class LoginActivity extends AppCompatActivity {
         String password = editPassword.getText().toString();
 
         //发送网络请求
-        sendRequestWithOkHttp(account, password);
+//        sendRequestWithOkHttp(account, password);
 
+        //模拟登陆
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
@@ -152,56 +151,56 @@ public class LoginActivity extends AppCompatActivity {
                 }, 3000);
     }
 
-    /**
-     * 发送网络请求
-     *
-     * @param account  手机号
-     * @param password 该手机号收到的验证码
-     */
-    private void sendRequestWithOkHttp(final String account, final String password) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    OkHttpClient client = new OkHttpClient();
-                    RequestBody requestBody = new FormBody.Builder()
-                            .add("phone", account)
-                            .add("validCode", password)
-                            .build();
-                    Request request = new Request.Builder()
-                            .url(I.URL_LOGIN)
-                            .post(requestBody)
-                            .build();
-                    Log.e(TAG, "request: " + request);
-                    Response response = client.newCall(request).execute();
-                    //判断请求数据
-                    if (response.isSuccessful()) {
-                        Log.e(TAG, "请求数据成功: " + response);
-                    } else {
-                        throw new IOException("解析异常：" + response);
-                    }
-
-//                    String responseData = response.body().string();
-
-                    //解析 JSON 数据
-//                    parseJSONWithGSON(responseData);//使用 GSON
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    private void parseJSONWithGSON(String jsonData) {
-        Gson gson = new Gson();
-        List<LoginBean> beanList = gson.fromJson(jsonData,
-                new TypeToken<List<LoginBean>>() {
-                }.getType());
-        for (LoginBean loginBean : beanList) {
-            Log.e(TAG, "parseJSONWithGSON: phone is " + loginBean.getPhone());
-            Log.e(TAG, "parseJSONWithGSON: validCode is " + loginBean.getValidCode());
-        }
-    }
+//    /**
+//     * 发送网络请求
+//     *
+//     * @param account  手机号
+//     * @param password 该手机号收到的验证码
+//     */
+//    private void sendRequestWithOkHttp(final String account, final String password) {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    OkHttpClient client = new OkHttpClient();
+//                    RequestBody requestBody = new FormBody.Builder()
+//                            .add("phone", account)
+//                            .add("validCode", password)
+//                            .build();
+//                    Request request = new Request.Builder()
+//                            .url(I.URL_LOGIN)
+//                            .post(requestBody)
+//                            .build();
+//                    Log.e(TAG, "request: " + request);
+//                    Response response = client.newCall(request).execute();
+//                    //判断请求数据
+//                    if (response.isSuccessful()) {
+//                        Log.e(TAG, "请求数据成功: " + response);
+//                    } else {
+//                        throw new IOException("解析异常：" + response);
+//                    }
+//
+////                    String responseData = response.body().string();
+//
+//                    //解析 JSON 数据
+////                    parseJSONWithGSON(responseData);//使用 GSON
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+//    }
+//
+//    private void parseJSONWithGSON(String jsonData) {
+//        Gson gson = new Gson();
+//        List<LoginBean> beanList = gson.fromJson(jsonData,
+//                new TypeToken<List<LoginBean>>() {
+//                }.getType());
+//        for (LoginBean loginBean : beanList) {
+//            Log.e(TAG, "parseJSONWithGSON: phone is " + loginBean.getPhone());
+//            Log.e(TAG, "parseJSONWithGSON: validCode is " + loginBean.getValidCode());
+//        }
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
