@@ -67,8 +67,16 @@ public class MainActivity extends AppCompatActivity {
                 //重复选中时触发
                 switch (index) {// 测试用
                     case 0:
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        startActivity(intent);
+                        replaceFragment(new HomeFragment());
+                        break;
+                    case 1:
+                        replaceFragment(new CategoryFragment());
+                        break;
+                    case 2:
+                        replaceFragment(new EnterFragment());
+                        break;
+                    case 3:
+                        replaceFragment(new MineFragment());
                         break;
                 }
             }
