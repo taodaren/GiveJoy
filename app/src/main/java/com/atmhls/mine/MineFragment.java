@@ -1,30 +1,57 @@
 package com.atmhls.mine;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.atmhls.givejoy.R;
 import com.atmhls.global.BaseFragment;
+import com.atmhls.global.I;
 
 /**
  * 我的模块
  */
 
-public class MineFragment extends BaseFragment implements View.OnClickListener {
+public class MineFragment extends BaseFragment /* implements View.OnClickListener */ {
 
     @Override
     public View initView() {
         View inflate = View.inflate(getContext(), R.layout.fragment_mine, null);
-        setClickListener(inflate);
+        setWebView(inflate);
+//        setClickListener(inflate);
         return inflate;
+    }
+
+    private void setWebView(View view) {
+        final WebView webView = (WebView) view.findViewById(R.id.web_mine);
+        webView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                //按下返回键并且 webView 界面可以返回
+                if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            webView.goBack();
+                        }
+                    });
+                    return true;
+                }
+                return false;
+            }
+        });
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebViewClient(new WebViewClient());
+        webView.loadUrl(I.TAB_MINE);
     }
 
     /**
@@ -74,49 +101,49 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         return true;
     }
 
-    private void setClickListener(View inflate) {
-        inflate.findViewById(R.id.img_avatar).setOnClickListener(this);
-        inflate.findViewById(R.id.qian_bao_mine).setOnClickListener(this);
-        inflate.findViewById(R.id.yao_qing_ma_mine).setOnClickListener(this);
-        inflate.findViewById(R.id.yao_qing_mine).setOnClickListener(this);
-        inflate.findViewById(R.id.msg_mine).setOnClickListener(this);
-        inflate.findViewById(R.id.zhong_chou_mine).setOnClickListener(this);
-        inflate.findViewById(R.id.quan_shu_mine).setOnClickListener(this);
-        inflate.findViewById(R.id.quit_mine).setOnClickListener(this);
-        inflate.findViewById(R.id.set_mine).setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.img_avatar:
-                Intent intent = new Intent(getContext(), MaterialActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.qian_bao_mine:
-                Toast.makeText(mContext, "qian_bao_mine", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.yao_qing_ma_mine:
-                Toast.makeText(mContext, "yao_qing_ma_mine", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.yao_qing_mine:
-                Toast.makeText(mContext, "yao_qing_mine", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.msg_mine:
-                Toast.makeText(mContext, "msg_mine", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.zhong_chou_mine:
-                Toast.makeText(mContext, "zhong_chou_mine", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.quan_shu_mine:
-                Toast.makeText(mContext, "quan_shu_mine", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.quit_mine:
-                Toast.makeText(mContext, "quit_mine", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.set_mine:
-                Toast.makeText(mContext, "set_mine", Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
+//    private void setClickListener(View inflate) {
+//        inflate.findViewById(R.id.img_avatar).setOnClickListener(this);
+//        inflate.findViewById(R.id.qian_bao_mine).setOnClickListener(this);
+//        inflate.findViewById(R.id.yao_qing_ma_mine).setOnClickListener(this);
+//        inflate.findViewById(R.id.yao_qing_mine).setOnClickListener(this);
+//        inflate.findViewById(R.id.msg_mine).setOnClickListener(this);
+//        inflate.findViewById(R.id.zhong_chou_mine).setOnClickListener(this);
+//        inflate.findViewById(R.id.quan_shu_mine).setOnClickListener(this);
+//        inflate.findViewById(R.id.quit_mine).setOnClickListener(this);
+//        inflate.findViewById(R.id.set_mine).setOnClickListener(this);
+//    }
+//
+//    @Override
+//    public void onClick(View v) {
+//        switch (v.getId()) {
+//            case R.id.img_avatar:
+//                Intent intent = new Intent(getContext(), MaterialActivity.class);
+//                startActivity(intent);
+//                break;
+//            case R.id.qian_bao_mine:
+//                Toast.makeText(mContext, "qian_bao_mine", Toast.LENGTH_SHORT).show();
+//                break;
+//            case R.id.yao_qing_ma_mine:
+//                Toast.makeText(mContext, "yao_qing_ma_mine", Toast.LENGTH_SHORT).show();
+//                break;
+//            case R.id.yao_qing_mine:
+//                Toast.makeText(mContext, "yao_qing_mine", Toast.LENGTH_SHORT).show();
+//                break;
+//            case R.id.msg_mine:
+//                Toast.makeText(mContext, "msg_mine", Toast.LENGTH_SHORT).show();
+//                break;
+//            case R.id.zhong_chou_mine:
+//                Toast.makeText(mContext, "zhong_chou_mine", Toast.LENGTH_SHORT).show();
+//                break;
+//            case R.id.quan_shu_mine:
+//                Toast.makeText(mContext, "quan_shu_mine", Toast.LENGTH_SHORT).show();
+//                break;
+//            case R.id.quit_mine:
+//                Toast.makeText(mContext, "quit_mine", Toast.LENGTH_SHORT).show();
+//                break;
+//            case R.id.set_mine:
+//                Toast.makeText(mContext, "set_mine", Toast.LENGTH_SHORT).show();
+//                break;
+//        }
+//    }
 }

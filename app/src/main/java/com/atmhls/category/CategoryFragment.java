@@ -2,6 +2,7 @@ package com.atmhls.category;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.atmhls.givejoy.R;
 import com.atmhls.global.BaseFragment;
+import com.atmhls.global.I;
 
 /**
  * 附近店铺模块
@@ -26,11 +28,27 @@ public class CategoryFragment extends BaseFragment {
         return inflate;
     }
 
-    private void setWebView(View inflate) {
-        WebView webView = (WebView) inflate.findViewById(R.id.web_category);
+    private void setWebView(View view) {
+        final WebView webView = (WebView) view.findViewById(R.id.web_category);
+        webView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                //按下返回键并且 webView 界面可以返回
+                if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            webView.goBack();
+                        }
+                    });
+                    return true;
+                }
+                return false;
+            }
+        });
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("http://stormzhang.com/posts/");
+        webView.loadUrl(I.TAB_CATEGORY);
     }
 
     /**
